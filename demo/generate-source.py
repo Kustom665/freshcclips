@@ -1,5 +1,9 @@
-"""Generates demo/speech.wav + demo/words.json with espeak-ng. Then build the source video:
-ffmpeg -f lavfi -i color=c=0x14060c:s=1280x720:r=30 -i speech.wav -filter_complex "[0:v]drawtext=fontfile=/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf:text=KAI\\ NORTH:fontsize=96:fontcolor=white:x=(w-text_w)/2:y=560[v]" -map [v] -map 1:a -shortest -c:v libx264 -pix_fmt yuv420p -c:a aac source.mp4
+"""Generates speech.wav + words.json with espeak-ng (run from the repo root; outputs land in the cwd).
+Then build a 1280x720 source whose title survives the centre 9:16 crop (keep titles inside the middle 405 px):
+
+ffmpeg -f lavfi -i color=c=0x14060c:s=1280x720:r=30 -i speech.wav -filter_complex \
+  "[0:v]drawtext=fontfile=/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf:text='KAI NORTH':fontsize=58:fontcolor=white:x=(w-text_w)/2:y=52[v]" \
+  -map [v] -map 1:a -shortest -c:v libx264 -pix_fmt yuv420p -c:a aac source.mp4
 """
 import json, subprocess, wave, os, re
 # Fictional artist "KAI NORTH" — a spoken-word / interview style monologue for the demo.
